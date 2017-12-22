@@ -1,0 +1,43 @@
+server {
+
+  listen 80 default_server;
+  
+  root <%= @docroot %>;
+  index index.php index.html index.htm;
+  server_name <%= @server_name %> www.<%= @server_name %> <% if @server_aliases && !@server_aliases.empty? -%><% @server_aliases.each do |a| %><%= a %> <% end %><% end -%>;
+  access_log /var/log/nginx/<%= @server_name %>.access.log;
+  log_not_found off;
+  error_log /var/log/nginx/<%= @server_name %>.error.log;
+  default_type text/html;
+  client_max_body_size 32M;
+  gzip on;
+  gzip_types text/css text/x-component application/x-javascript application/javascript text/javascript text/x-js text/richtext image/svg+xml text/plain text/xsd text/xsl text/xml image/bmp application/java application/msword application/vnd.ms-fontobject application/x-msdownload image/x-icon image/webp application/json application/vnd.ms-access application/vnd.ms-project application/x-font-otf application/vnd.ms-opentype application/vnd.oasis.opendocument.database application/vnd.oasis.opendocument.chart application/vnd.oasis.opendocument.formula application/vnd.oasis.opendocument.graphics application/vnd.oasis.opendocument.spreadsheet application/vnd.oasis.opendocument.text audio/ogg application/pdf application/vnd.ms-powerpoint application/x-shockwave-flash image/tiff application/x-font-ttf audio/wav application/vnd.ms-write application/font-woff application/font-woff2 application/vnd.ms-excel;
+
+  location /nginx_status {
+    stub_status on;
+    access_log off;
+    allow 127.0.0.1;
+    deny all;
+  }
+
+  location /healthz {
+    return 200 'Service is running';
+  }
+
+  location / {
+    client_max_body_size 32M;
+    try_files $uri $uri/ /index.php$is_args$args;
+  }
+
+  location ~ /(\.ht|etc|\.git) {
+    deny all;
+  }
+
+  location ~ \.php$ {
+    client_max_body_size  32M;
+    fastcgi_param         SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param         APPLICATION_ENV production;
+    include               /etc/nginx/fastcgi_params;
+    fastcgi_pass          unix:/var/run/php-fpm-www.sock;
+  }
+}
