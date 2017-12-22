@@ -57,4 +57,3 @@ default['php_custom']['memory_limit'] = '2048M'
 
 
 default['deploy_install'] = []
-default['deploy_install'].push 'composer install --no-scripts'
