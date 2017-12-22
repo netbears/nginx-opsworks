@@ -10,6 +10,6 @@ gem 'chefspec', '~> 6.0'
 gem 'dotenv', '~> 2.2'
 gem 'kitchen-sync', '~> 2.1'
 gem 'rake', '~> 12.0'
-gem 'rubocop', '~> 0.47', require: false
+gem 'rubocop'
 gem 'serverspec', '~> 2.38'
 gem 'test-kitchen', '~> 1.15'
