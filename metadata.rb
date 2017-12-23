@@ -3,7 +3,7 @@ maintainer       'NETBEARS'
 license          'All rights reserved'
 description      'Installs/Configures netbears_nginx'
 long_description 'Installs/Configures netbears_nginx'
-version          '1.5.7'
+version          '1.0.0'
 
 depends 'build-essential'
 depends 'git'
